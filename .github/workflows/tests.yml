@@ -101,7 +101,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: tide-labs/tidechain
-          ref: ${{ github.event.inputs.ref }}
+          ref: dev
           fetch-depth: 0
           path: tidechain
 
