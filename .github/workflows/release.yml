@@ -79,7 +79,7 @@ jobs:
       - name: Render release notes
         run: |
           export CHANGELOG=$(cat changelog.md)
-          export REPO=${{ github.REPOSITORY }}
+          export REPO=tidelabs/srtool
           export TAG=$RUSTC_VERSION-$SRTOOL_VERSION
           tera --env --env-only --template templates/release.md > RELEASE_NOTES.md
 
@@ -122,7 +122,7 @@ jobs:
 
       - name: Tag image
         env:
-          REPO: ${{ github.REPOSITORY }}
+          REPO: tidelabs/srtool
         run: |
           docker tag srtool $REPO:$RUSTC_VERSION-$SRTOOL_VERSION
           docker tag srtool $REPO:$RUSTC_VERSION
@@ -131,12 +131,12 @@ jobs:
       - name: Log into Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASS }}
 
       - name: Push Docker image
         env:
-          REPO: ${{ github.REPOSITORY }}
+          REPO: tidelabs/srtool
         run: |
           docker push $REPO:$RUSTC_VERSION-$SRTOOL_VERSION
           docker push $REPO:$RUSTC_VERSION

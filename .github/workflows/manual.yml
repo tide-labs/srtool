@@ -8,11 +8,11 @@ on:
     inputs:
       srtool_tag:
         description: The SRTOOL tag to use
-        default: 1.57.0
+        default: 1.59.0
         required: false
       srtool_image:
         description: The SRTOOL image to use
-        default: paritytech/srtool
+        default: tidelabs/srtool
         required: false
       chain:
         description: The chain to use
@@ -24,7 +24,7 @@ on:
         required: true
       repository:
         description: The repository to be used
-        default: paritytech/substrate
+        default: tide-labs/tidechain
         required: true
       runtime_dir:
         description: The runtime_dir to be used

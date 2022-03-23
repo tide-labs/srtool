@@ -1,5 +1,5 @@
 export RUSTC_VERSION:=`cat RUSTC_VERSION`
-export REPO:="paritytech/srtool"
+export REPO:="tidelabs/srtool"
 export TAG:=`cat VERSION`
 
 _default:
