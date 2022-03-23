@@ -63,7 +63,7 @@ This method is legacy and deprecated. It is recommended to use the `srtool-cli` 
 
 Creating an alias helps hiding the docker complexity behind one simple command. We will see more powerful options but this one is simple enough.
 
-        export RUSTC_VERSION=1.59.0; export PACKAGE=kusama-runtime; alias srtool='docker run --rm -it -e PACKAGE=$PACKAGE -v $PWD:/build -v $TMPDIR/cargo:/cargo-home tidelabs/srtool:$RUSTC_VERSION'
+        export RUSTC_VERSION=1.59.0; export PACKAGE=tidechain-runtime; alias srtool='docker run --rm -it -e PACKAGE=$PACKAGE -v $PWD:/build -v $TMPDIR/cargo:/cargo-home tidelabs/srtool:$RUSTC_VERSION'
 
 Note that defining the alias as done above will hardcode the runtime. Using `kusama-runtime` as shown above means you will **always** check the Kusama runtime. If you need more, check the next chapter.
 
