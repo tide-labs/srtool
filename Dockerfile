@@ -5,7 +5,7 @@ LABEL description="This image contains tools for Substrate blockchains runtimes.
 
 ARG RUSTC_VERSION="1.59.0"
 ENV RUSTC_VERSION=$RUSTC_VERSION
-ENV DOCKER_IMAGE="paritytech/srtool"
+ENV DOCKER_IMAGE="tidelabs/srtool"
 ENV PROFILE=release
 ENV PACKAGE=tidechain-runtime
 
