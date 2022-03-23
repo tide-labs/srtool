@@ -2,7 +2,7 @@ name: Build & Tests
 on:
   push:
     branches:
-      - master
+      - tidechain
     tags:
       - "!v*"
 
@@ -180,7 +180,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        chain: ["statemine", "statemint", "westmint", "rococo-parachain", "shell"]
+        chain:
+          ["statemine", "statemint", "westmint", "rococo-parachain", "shell"]
     steps:
       - name: Cache the image
         uses: actions/cache@v2

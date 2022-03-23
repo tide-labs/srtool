@@ -79,7 +79,7 @@ jobs:
       - name: Render release notes
         run: |
           export CHANGELOG=$(cat changelog.md)
-          export REPO=${{ github.REPOSITORY }}
+          export REPO=tidelabs/srtool
           export TAG=$RUSTC_VERSION-$SRTOOL_VERSION
           tera --env --env-only --template templates/release.md > RELEASE_NOTES.md
 
@@ -122,7 +122,7 @@ jobs:
 
       - name: Tag image
         env:
-          REPO: ${{ github.REPOSITORY }}
+          REPO: tidelabs/srtool
         run: |
           docker tag srtool $REPO:$RUSTC_VERSION-$SRTOOL_VERSION
           docker tag srtool $REPO:$RUSTC_VERSION
@@ -136,7 +136,7 @@ jobs:
 
       - name: Push Docker image
         env:
-          REPO: ${{ github.REPOSITORY }}
+          REPO: tidelabs/srtool
         run: |
           docker push $REPO:$RUSTC_VERSION-$SRTOOL_VERSION
           docker push $REPO:$RUSTC_VERSION
