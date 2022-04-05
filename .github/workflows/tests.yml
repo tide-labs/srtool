@@ -101,7 +101,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           token: ${{ secrets.GH_PAT }}
-          repository: tide-labs/tidechain
+          repository: tidelabs/tidechain
           ref: dev
           fetch-depth: 0
           path: tidechain

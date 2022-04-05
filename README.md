@@ -4,7 +4,7 @@
 
 ## Intro
 
-`srtool` is a collection of dockerized tools helping with [Tidechain](https://github.com/tide-labs/tidechain) Runtime development. `srtool` especially allows building WASM runtimes in a deterministic way, allowing CIs and users, with various machines and OS, to produce a strictly identical WASM runtime.
+`srtool` is a collection of dockerized tools helping with [Tidechain](https://github.com/tidelabs/tidechain) Runtime development. `srtool` especially allows building WASM runtimes in a deterministic way, allowing CIs and users, with various machines and OS, to produce a strictly identical WASM runtime.
 
 `srtool` can run on various Operating Systems supporting Docker. That includes Linux, MacOS and Windows.
 
@@ -16,11 +16,11 @@ The Docker images are tagged with both the rustc version used internally as well
 
 You may find for instance the following:
 
--   `tidelabs/srtool:1.59.0-0.9.16`
+- `tidelabs/srtool:1.59.0-0.9.16`
 
--   `tidelabs/srtool:1.59.0-0.9.19`
+- `tidelabs/srtool:1.59.0-0.9.19`
 
--   `tidelabs/srtool:1.59.0`
+- `tidelabs/srtool:1.59.0`
 
 The tags not mentioning the build version always point to the latest one. In the example above, `tidelabs/srtool:1.59.0` is the same image than `tidelabs/srtool:1.59.0-0.9.19`.
 
@@ -28,13 +28,13 @@ The tags not mentioning the build version always point to the latest one. In the
 
 There are a few other helpers you may want to check out when using `srtool`:
 
--   [srtool-cli](https://github.com/chevdor/srtool-cli): This Rust executable supersedes the previously recommended alias solution. It brings many benefits and is much easier to use.
+- [srtool-cli](https://github.com/chevdor/srtool-cli): This Rust executable supersedes the previously recommended alias solution. It brings many benefits and is much easier to use.
 
--   [srtool-app](https://gitlab.com/chevdor/srtool-app): The basic features of `srtool` in a simple GUI, available on multiple platforms.
+- [srtool-app](https://gitlab.com/chevdor/srtool-app): The basic features of `srtool` in a simple GUI, available on multiple platforms.
 
--   [srtool-actions](https://github.com/chevdor/srtool-actions): This Github actions makes it much easier to integrate `srtool` in your CI.
+- [srtool-actions](https://github.com/chevdor/srtool-actions): This Github actions makes it much easier to integrate `srtool` in your CI.
 
--   …​ and more to come
+- …​ and more to come
 
 ![Frame 1 256](resources/Frame%201_256.png)
 
@@ -294,14 +294,15 @@ If you’re using `zsh` and `zinit`, you may benefit from using the srtool snipp
 To do so, add the following to your `zshconfig`:
 
     MY_REPO="https://gitlab.com/chevdor/dotfiles/-/raw/master/zsh-plugins"
-    for plugin (git cargo srtool); { 
+    for plugin (git cargo srtool); {
       SNIPPET="$MY_REPO/$plugin/$plugin.plugin.zsh"
       zinit snippet $SNIPPET
     }
 
--   Chose the snippets you want, the one called `srtool` here is the interesting one.
+- Chose the snippets you want, the one called `srtool` here is the interesting one.
 
 After that, make sure to:
+
 - upgrade your snippets: `zplugin update --all`
 - restart/source your shell: `. ~/.zshrc`
 
@@ -321,13 +322,13 @@ So say you want to build a builder for rustc 1.59.0:
 
 You can see the list of available scripts in the `/scripts` folder:
 
--   `help`: Show some help.
+- `help`: Show some help.
 
--   `version`: Show some version.
+- `version`: Show some version.
 
--   `info`: Show available system info before running a build.
+- `info`: Show available system info before running a build.
 
--   `build`: Run the actual build.
+- `build`: Run the actual build.
 
 The `info` and `version` scripts pass any arguments you pass to the script to `jq`. So you can play with `c` (compact), `-M` (monochrome), `-C` color output. For instance `docker run --rm -it -v $PWD:/build chevdor/srtool:1.59.0 info -cM` shows a monochrome output on a single line.
 

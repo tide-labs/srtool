@@ -24,7 +24,7 @@ on:
         required: true
       repository:
         description: The repository to be used
-        default: tide-labs/tidechain
+        default: tidelabs/tidechain
         required: true
       runtime_dir:
         description: The runtime_dir to be used
