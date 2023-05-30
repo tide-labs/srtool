@@ -1,17 +1,14 @@
-name: Build & Tests
+name: Quick Test
 on:
   push:
     branches:
-      - tidechain
+      - master
     tags:
       - "!v*"
 
   pull_request:
 
   workflow_dispatch:
-
-  schedule:
-    - cron: "00 05 * * 1" # 5AM weekly on mondays
 
 jobs:
   build:
@@ -119,14 +116,14 @@ jobs:
           find tests -type f
           container-structure-test test --image srtool --verbosity info ${TESTS}
 
-  tidechain:
+  polkadot:
     runs-on: ubuntu-latest
     needs: build
     continue-on-error: false
     strategy:
       fail-fast: false
       matrix:
-        chain: ["lagoon", "tidechain"]
+        chain: ["westend"]
     steps:
       - name: Cache the image
         uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7 # v3.0.11
@@ -140,20 +137,19 @@ jobs:
           docker load -i srtool.tar.gz
           docker images --digests
 
-      - name: Check out the Tidechain repo
+      - name: Check out the Polkadot repo
         uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
         with:
-          token: ${{ secrets.GH_PAT }}
-          repository: tidelabs/tidechain
-          ref: dev
+          repository: paritytech/polkadot
+          ref: ${{ github.event.inputs.ref }}
           fetch-depth: 0
-          path: tidechain
+          path: polkadot
 
       - name: Run srtool info
         env:
           PACKAGE: ${{ matrix.chain }}-runtime
           RUNTIME_DIR: runtime/${{ matrix.chain }}
-        working-directory: tidechain
+        working-directory: polkadot
         run: |
           INFO=$(docker run --rm -i \
             -e PACKAGE=$PACKAGE \
@@ -168,25 +164,33 @@ jobs:
             echo $INFO
           fi
 
-      - name: Debugging
+      - name: Debug information
         env:
           PACKAGE: ${{ matrix.chain }}-runtime
           RUNTIME_DIR: runtime/${{ matrix.chain }}
-        working-directory: tidechain
+        working-directory: polkadot
         run: |
+          echo "::group::Runtimes"
           ls -al runtime || true
+          echo "::endgroup::"
+
+          echo "::group::${{ matrix.chain }}"
           ls -al runtime/${{ matrix.chain }} || true
+          echo "::endgroup::"
+
+          echo "::group::IDs and Docker"
           id -u runner || true
           id -g runner || true
           id -u docker || true
           docker info --format "{{ .ClientInfo.Context }}"
+          echo "::endgroup::"
 
       - name: Run srtool build for ${{ matrix.chain }}
         id: srtool_build
         env:
           PACKAGE: ${{ matrix.chain }}-runtime
           RUNTIME_DIR: runtime/${{ matrix.chain }}
-        working-directory: tidechain
+        working-directory: polkadot
         run: |
           CMD="docker run --rm -i \
             -e PACKAGE=$PACKAGE \
@@ -217,7 +221,7 @@ jobs:
           echo "::endgroup::"
 
       - name: Summary for ${{ matrix.chain }}
-        working-directory: tidechain
+        working-directory: polkadot
         run: |
           echo "::group::JSON digest"
           echo $JSON | jq . | tee ${{ matrix.chain }}-srtool-digest.json
@@ -239,6 +243,6 @@ jobs:
         with:
           name: ${{ matrix.chain }}-runtime
           path: |
-            tidechain/${{ steps.srtool_build.outputs.wasm }}
-            tidechain/${{ steps.srtool_build.outputs.wasm_compressed }}
-            tidechain/${{ matrix.chain }}-srtool-digest.json
+            polkadot/${{ steps.srtool_build.outputs.wasm }}
+            polkadot/${{ steps.srtool_build.outputs.wasm_compressed }}
+            polkadot/${{ matrix.chain }}-srtool-digest.json

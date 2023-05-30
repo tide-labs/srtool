@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 CDIR=`dirname "$0"`
-source "$CDIR/lib.sh"
+source "/srtool/lib.sh"
 
 # This script helps since version v0.8.30. Starting with this version
 # a few feature has been introduced and is highly required to build
@@ -16,12 +16,14 @@ source "$CDIR/lib.sh"
 # and until Cargo.toml is updated will likely not work.
 # srtool cannot count on the source to be a git repo.
 
-PKG_VERSION=`toml get Cargo.toml package.version | jq -r`
+# PKG_VERSION=`toml get Cargo.toml package.version | jq -r`
+PKG_VERSION=$(get_runtime_package_version "$PACKAGE")
+
 REF_VERSION="0.8.30"
 DEFAULT_FEATURES="${DEFAULT_FEATURES:---features on-chain-release-build}"
 
 if [[ "$PACKAGE" =~ ^(kusama|polkadot)-runtime$ ]]; then
-    vercomp $PKG_VERSION $REF_VERSION
+    vercomp "$PKG_VERSION" "$REF_VERSION"
     case $? in
         0) opts="${DEFAULT_FEATURES}";;
         1) opts="${DEFAULT_FEATURES}";;
