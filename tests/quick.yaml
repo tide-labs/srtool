@@ -36,13 +36,13 @@ commandTests:
 metadataTest:
   envVars:
     - key: DOCKER_IMAGE
-      value: paritytech/srtool
+      value: tidelabs/srtool
     - key: RUSTC_VERSION
       value: '^\d+\.\d+\.\d+$'
       isRegex: true
   labels:
     - key: maintainer
-      value: chevdor@gmail.com
+      value: ops@semantic-network.com
 
   exposedPorts: []
   volumes: [ "/build",

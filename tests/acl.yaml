@@ -41,13 +41,13 @@ commandTests:
         mkdir test
     exitCode: 0
 
-  - name: "polkadot-runtime"
+  - name: "tidechain-runtime"
     setup: []
     command: "bash"
     args:
       - -c
       - |
-        export TARGET=/build/runtime/polkadot
+        export TARGET=/build/runtime/tidechain
         mkdir -p $TARGET
         cd $TARGET
         mkdir target

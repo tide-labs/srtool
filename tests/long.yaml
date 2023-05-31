@@ -15,12 +15,12 @@ commandTests:
     expectedOutput: ["git version"]
 
   # - name: "Build"
-  #   # setup: [["echo", "setup"],["ls", "-al"], ["git","clone", "https://github.com/paritytech/polkadot", "/build/"]]
+  #   # setup: [["echo", "setup"],["ls", "-al"], ["git","clone", "https://github.com/tidelabs/tidechain", "/build/"]]
   #   command: "bash"
   #   args:
   #     - -c
   #     - |
   #       set -e
-  #       git clone https://github.com/paritytech/polkadot /build/
+  #       git clone https://github.com/tidelabs/tidechain /build/
   #       ls -al /build
   #   exitCode: 0
