@@ -54,7 +54,7 @@ ENV PATH="/srtool:$PATH"
 RUN echo $SHELL && \
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
     . $CARGO_HOME/env && \
-    rustup toolchain add stable ${RUSTC_VERSION} && \
+    # rustup toolchain add stable ${RUSTC_VERSION} && \
     rustup target add wasm32-unknown-unknown --toolchain $RUSTC_VERSION && \
     chmod -R a+w $RUSTUP_HOME $CARGO_HOME && \
     rustup show && rustc -V
