@@ -18,7 +18,7 @@ build:
     @echo If you encounter issues, try running `just cleanup` and try building again.
     @echo Any arg you pass is forward to 'podman build'... You can pass'`--no-cache' for instance
     podman build $@ --build-arg RUSTC_VERSION=$RUSTC_VERSION \
-        -t $REGISTRY/chevdor/srtool:$RUSTC_VERSION-$TAG-$COMMIT \
+        -t $REGISTRY/tidelabs/srtool:$RUSTC_VERSION-$TAG-$COMMIT \
         -t $REGISTRY/$REPO:$RUSTC_VERSION-$TAG \
         -t $REGISTRY/$REPO \
         -t $REGISTRY/${REPO#*/} \

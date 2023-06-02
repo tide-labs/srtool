@@ -55,6 +55,8 @@ RUN echo $SHELL && \
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain $RUSTC_VERSION -y  && \
     . $CARGO_HOME/env && \
     rustup toolchain add stable ${RUSTC_VERSION} && \
+    rustup update nightly && \
+    rustup target add wasm32-unknown-unknown --toolchain nightly && \
     rustup target add wasm32-unknown-unknown --toolchain $RUSTC_VERSION && \
     chmod -R a+w $RUSTUP_HOME $CARGO_HOME && \
     rustup show && rustc -V

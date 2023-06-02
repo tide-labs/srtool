@@ -47,7 +47,7 @@ jobs:
 
       - name: Srtool build
         id: srtool_build
-        uses: chevdor/srtool-actions@v0.6.0
+        uses: tidelabs/srtool-actions@v0.6.0
         with:
           chain: ${{ github.event.inputs.chain }}
           package: ${{ github.event.inputs.package }}
