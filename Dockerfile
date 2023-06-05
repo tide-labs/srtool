@@ -59,7 +59,7 @@ RUN echo $SHELL && \
     rustup update nightly && \
     rustup target add wasm32-unknown-unknown --toolchain nightly && \
     chmod -R a+w $RUSTUP_HOME $CARGO_HOME && \
-    rustup show && rustup +nightly && rustc -V
+    rustup show && rustc -V
 
 RUN git config --global --add safe.directory /build && \
     /srtool/version && \
