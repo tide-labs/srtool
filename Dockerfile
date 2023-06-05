@@ -3,7 +3,7 @@ FROM docker.io/library/ubuntu:22.04
 LABEL maintainer "ops@semantic-network.com"
 LABEL description="This image contains tools for Substrate blockchains runtimes."
 
-ARG RUSTC_VERSION="1.70.0"
+ARG RUSTC_VERSION="1.69.0"
 ENV RUSTC_VERSION=$RUSTC_VERSION
 ENV DOCKER_IMAGE="tidelabs/srtool"
 ENV PROFILE=release
@@ -52,12 +52,11 @@ ENV CARGO_HOME="/home/${BUILDER}/cargo"
 ENV PATH="/srtool:$PATH"
 
 RUN echo $SHELL && \
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain=1.69.0 -y && \
     . $CARGO_HOME/env && \
-    rustup default stable && \
-    rustup update && \
-    rustup update nightly && \
-    rustup target add wasm32-unknown-unknown --toolchain nightly && \
+    rustup default 1.69.0-x86_64-unknown-linux-gnu && \
+    rustup install nightly-2023-04-16 && \
+    rustup target add wasm32-unknown-unknown --toolchain nightly-2023-04-16-x86_64-unknown-linux-gnu && \
     chmod -R a+w $RUSTUP_HOME $CARGO_HOME && \
     rustup show && rustc -V
 
