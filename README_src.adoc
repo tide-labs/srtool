@@ -1,5 +1,5 @@
 :name: tidelabs/srtool
-:rsversion: 1.69.0
+:rsversion: 1.68.0
 :version: 0.10.0
 // :rsversion: pass:m[include:RUSTC_VERSION[]] // TODO: not working...
 :toc: right
