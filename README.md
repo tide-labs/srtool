@@ -20,11 +20,11 @@ You may find for instance the following:
 
 - `tidelabs/srtool:1.68.0-0.9.19`
 
-- `tidelabs/srtool:1.68.0-0.10.0`
+- `tidelabs/srtool:1.68.0-0.9.26`
 
 - `tidelabs/srtool:1.68.0`
 
-The tags not mentioning the build version always point to the latest one. In the example above, `tidelabs/srtool:1.68.0` is the same image than `tidelabs/srtool:1.68.0-0.10.0`.
+The tags not mentioning the build version always point to the latest one. In the example above, `tidelabs/srtool:1.68.0` is the same image than `tidelabs/srtool:1.68.0-0.9.26`.
 
 ## Related tools
 
@@ -155,7 +155,7 @@ The output will look something like:
         "info": {
           "generator": {
             "name": "srtool",
-            "version": "0.10.0"
+            "version": "0.9.26"
           },
           "src": "git",
           "version": "1.0.0",
