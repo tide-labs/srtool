@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 export CDIR=`dirname "$0"`
-source "$CDIR/lib.sh"
+. "$CARGO_HOME/env"
+. "$CDIR/lib.sh"
+
+# echo $PATH
 
 # If the user sends a SIGINT, we want to exit the entire script
 trap "exit" INT
@@ -12,7 +15,7 @@ export VERSION=`cat /srtool/VERSION || echo 0.0.0`
 export GEN="srtool v$VERSION"
 export LATEST_VERSION=$(curl -L -s https://github.com/paritytech/srtool/raw/master/VERSION)
 
-vercomp $LATEST_VERSION $VERSION
+vercomp "$LATEST_VERSION" "$VERSION"
 
 case $? in
     0) op='=';;
@@ -70,12 +73,12 @@ fi
 # As of https://github.com/paritytech/polkadot/pull/2522 we need to cd to the
 # runtime directory itself
 export RUNTIME_NAME="${PACKAGE/-*/}"
-export GET_OPTS_CMD="${CDIR}/getBuildOpts.sh"
+export GET_OPTS_CMD="/srtool/getBuildOpts.sh"
 export GET_OPTS=`$GET_OPTS_CMD`
 export BUILD_OPTS="${BUILD_OPTS:-${GET_OPTS}}"
 export PROFILE="${PROFILE:-release}"
 export RUNTIME_DIR="${RUNTIME_DIR:-runtime/$RUNTIME_NAME}"
-export RUSTC_BOOTSTRAP=1
+# export RUSTC_BOOTSTRAP=1
 
 # We check a few things before spending too much time building...
 
@@ -85,10 +88,10 @@ if [ ! -f Cargo.toml ]; then
     exit 1
 fi
 
-CRATE_VERSION=`toml get "/build/$RUNTIME_DIR/Cargo.toml" package.version | jq -r`
+CRATE_VERSION=$(get_runtime_package_version "$PACKAGE")
 CRATE_NAME=`toml get "/build/$RUNTIME_DIR/Cargo.toml" package.name | jq -r`
 
-if [[ $CRATE_NAME != $PACKAGE ]]; then
+if [[ $CRATE_NAME != "$PACKAGE" ]]; then
     echo "!!! The PACKAGE '$PACKAGE' does not match the crate name at '$RUNTIME_DIR'. Did you mean '$CRATE_NAME'?"
     exit 1
 fi
@@ -106,8 +109,11 @@ else
 fi
 
 pushd "$RUNTIME_DIR" > /dev/null || exit 1
-  CMD="cargo build --locked ${INT_OPTS} ${BUILD_OPTS} --color=$COLOR --$PROFILE --target-dir target/srtool --out-dir /out -Z unstable-options"
+  # TODO: --out-dir /out would be handy but still unstable
+  CMD="cargo build --locked ${INT_OPTS} ${BUILD_OPTS} --color=$COLOR --profile $PROFILE --target-dir target/srtool"
   if [ ! -z "$VERBOSE" ]; then
+      echo "Command run:"
+      echo "$CMD"
       time $CMD || exit 1
   else
       if [[ "$*" == *"--json"* && ! "$*" =~ --app ]]; then
@@ -116,8 +122,8 @@ pushd "$RUNTIME_DIR" > /dev/null || exit 1
           $CMD 2>&1 || exit 1
       fi
   fi
-  WASM=`find target/srtool/$PROFILE/wbuild/$PACKAGE -type f -name "*.compact.wasm"`
-  Z_WASM=`find target/srtool/$PROFILE/wbuild/$PACKAGE -type f -name "*.compact.compressed.wasm"`
+  WASM=`find "target/srtool/$PROFILE/wbuild/$PACKAGE" -type f -name "*.compact.wasm"`
+  Z_WASM=`find "target/srtool/$PROFILE/wbuild/$PACKAGE" -type f -name "*.compact.compressed.wasm"`
 popd > /dev/null || exit 1
 
 if [[ ! "$*" =~ --json ||  "$*" =~ --app ]]; then
@@ -127,24 +133,17 @@ fi
 export WASM=$RUNTIME_DIR/$WASM
 
 cp -f "$WASM" /out/
-if [ $Z_WASM ]; then
+if [ "$Z_WASM" ]; then
     export Z_WASM=$RUNTIME_DIR/$Z_WASM
     cp -f "$Z_WASM" /out/
 fi
 
-SHA256=0x`shasum -a 256 $WASM | awk '{print $1}'`
-MULTIHASH=`subwasm -j info $WASM | jq -r .ipfs_hash`
-SIZE=`wc -c < $WASM`
-LENGTH=16
-SKIP=`echo $(($SIZE-$LENGTH))`
-# Some magic to show the first and last bytes of the blob the same way the UI does when you see
-# a setCode coming from a motion or referendum
-PREVIEW=`printf "0x"; hexdump -n $LENGTH -ve '1/1 "%.2x"' $WASM; printf "..."; hexdump -n $LENGTH -s $SKIP -ve '1/1 "%.2x"' $WASM`
-
-SZ=`du -sb $WASM | awk '{print $1}'`
-KB=$(expr $SZ / 1024)
+SZ=`du -sb "$Z_WASM" | awk '{print $1}'`
 TMSP=`date --utc +%FT%TZ`
-PROP=`subwasm -j info $WASM | jq -r .proposal_hash`
+SHA256=0x`shasum -a 256 "$Z_WASM" | awk '{print $1}'`
+PROP=`subwasm -j info "$Z_WASM" | jq -r .proposal_hash`
+AUTHORIZE_UPGRADE_PROP=`subwasm -j info "$Z_WASM" | jq -r .parachain_authorize_upgrade_hash`
+MULTIHASH=`subwasm -j info "$Z_WASM" | jq -r .ipfs_hash`
 
 # If we work on a snapshot, we will NOT get a .git folder to work on
 if [ -d ".git" ]; then
@@ -156,10 +155,10 @@ else
     SRC='zip'
 fi
 
-COMPACT_DETAILS=`/srtool/analyse.sh $WASM | tail -n 1`
+COMPACT_DETAILS=`/srtool/analyse.sh "$WASM" | tail -n 1`
 
-if [ $Z_WASM ]; then
-    COMPRESSED_DETAILS=`/srtool/analyse.sh $Z_WASM | tail -n 1`
+if [ "$Z_WASM" ]; then
+    COMPRESSED_DETAILS=`/srtool/analyse.sh "$Z_WASM" | tail -n 1`
 else
     COMPRESSED_DETAILS={}
 fi
@@ -174,7 +173,9 @@ JSON=$( jq -n \
     --arg pkg "$PACKAGE" \
     --arg bytes "$SZ" \
     --arg wasm "$WASM" \
+    --arg z_wasm "$Z_WASM" \
     --arg prop "$PROP" \
+    --arg authorize_upgrade_prop "$AUTHORIZE_UPGRADE_PROP" \
     --arg sha256 "$SHA256" \
     --arg tmsp "$TMSP" \
     --arg git_tag "$GIT_TAG" \
@@ -198,9 +199,10 @@ JSON=$( jq -n \
         tmsp: $tmsp,
         size: $bytes,
         prop: $prop,
+        authorize_upgrade_prop: $authorize_upgrade_prop,
         ipfs: $ipfs,
         sha256: $sha256,
-        wasm: $wasm,
+        wasm: $z_wasm,
 
         info: $info,
         context: $context,

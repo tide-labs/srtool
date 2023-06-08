@@ -1,11 +1,11 @@
 :name: tidelabs/srtool
-:rsversion: 1.59.0
-:version: 0.9.19
+:rsversion: 1.68.0
+:version: 0.10.0
 // :rsversion: pass:m[include:RUSTC_VERSION[]] // TODO: not working...
 :toc: right
 :sectnums:
 
-= Substrate Runtime Toolbox: srtool
+= Substrate Runtime Toolbox: srtool v{version}
 
 image::resources/srtool-docker_128px.png[align=center, width=128px]
 
@@ -23,7 +23,7 @@ The Docker images are tagged with both the rustc version used internally as well
 
 You may find for instance the following:
 
-- `{name}:{rsversion}-0.9.16`
+- `{name}:{rsversion}-0.9.19`
 - `{name}:{rsversion}-{version}`
 - `{name}:{rsversion}`
 
