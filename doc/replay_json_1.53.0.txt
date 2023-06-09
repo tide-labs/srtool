@@ -51,7 +51,7 @@
  Downloaded thiserror-impl v1.0.24
  Downloaded parking_lot v0.11.1
  Downloaded subtle v2.4.0
- Downloaded parity-ws v0.10.0
+ Downloaded parity-ws v0.9.26
  Downloaded tiny-keccak v2.0.2
  Downloaded libm v0.2.1
  Downloaded yamux v0.9.0
@@ -472,7 +472,7 @@
  Downloaded rand_chacha v0.2.2
  Downloaded instant v0.1.9
  Downloaded parity-send-wrapper v0.1.0
- Downloaded multistream-select v0.10.0
+ Downloaded multistream-select v0.9.26
  Downloaded merlin v2.0.0
  Downloaded matrixmultiply v0.2.4
  Downloaded lru v0.6.5
@@ -947,14 +947,14 @@
  Compiling sp-utils v3.0.0 (https://github.com/paritytech/substrate?branch=master#4d9f03d3)
  Compiling intervalier v0.4.0
  Compiling exit-future v0.2.0
- Compiling multistream-select v0.10.0
+ Compiling multistream-select v0.9.26
  Compiling ct-logs v0.7.0
  Compiling rustls v0.19.1
  Compiling webpki-roots v0.21.0
  Compiling rustls v0.18.1
  Compiling substrate-bip39 v0.4.2
  Compiling tokio-util v0.3.1
- Compiling parity-ws v0.10.0
+ Compiling parity-ws v0.9.26
  Compiling async-global-executor v2.0.2
  Compiling async-process v1.0.1
  Compiling if-watch v0.2.0
